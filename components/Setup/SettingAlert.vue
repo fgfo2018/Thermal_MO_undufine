@@ -7,7 +7,7 @@
           <v-spacer></v-spacer>
           <!-- 電子郵件警報通知 右上方on/off -->
           <form>
-            <div class="switch-field py-0 my-0 px-1" style="pointer-events: none;">
+            <div class="switch-field py-0 my-0 px-1">
               <input id="radio-one-email-notice tesss" type="radio" name="switch-one" value="yes" :checked="emailSw ? 1 : 0"
                  />
               <label for="radio-one-email-notice" @click="emailSw = 1">ON</label>
@@ -269,7 +269,7 @@
           <v-spacer></v-spacer>
           <!-- LINE發報通知 右上方on/off -->
           <form>
-            <div class="switch-field py-0 my-0 px-1" style="pointer-events: none;">
+            <div class="switch-field py-0 my-0 px-1">
               <input id="radio-one-line-notice" type="radio" name="switch-one" value="yes" :checked=" emailSw1 ? 1 : 0 "
                 @click=" emailSw1 = 1 " />
               <label for="radio-one-line-notice">ON</label>
