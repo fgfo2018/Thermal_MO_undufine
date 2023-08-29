@@ -91,8 +91,8 @@ export default function (context, inject) {
             clearInterval(wssend03)
             wssend03 = null
         }
-        ws03 = new WebSocket("ws://localhost:8703/");
-        // ws03 = new WebSocket("ws://192.168.0.173:8703/");
+        // ws03 = new WebSocket("ws://localhost:8703/");
+        ws03 = new WebSocket("ws://192.168.0.116:8703/");
         ws03.onopen = (e) => {
             console.log('(plugins)串流連接成功::8703');
             wssend03 = setInterval(() => {

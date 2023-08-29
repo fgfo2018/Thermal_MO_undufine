@@ -137,11 +137,11 @@
                                                     v-if="tempList !== null">
                                                     <div v-for="(item, index) in tempKey" :key="index"
                                                         class="all-system-list d-flex">
-                                                        <div class="px-2">{{ item }} 溫度值</div>
-                                                        <div class="px-2 text-right tempFont">{{ tempList['5B02'][item].temp
+                                                        <div class="px-1">{{ item }} 溫度值</div>
+                                                        <div class="px-1 text-right tempFont">{{ tempList['5B02'][item].temp
                                                         }}
                                                         </div>
-                                                        <div class="px-2 text-center">°C</div>
+                                                        <div class="px-1 text-center">°C</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -156,11 +156,11 @@
                                                     v-if="tempList !== null">
                                                     <div v-for="(item, index) in tempKey" :key="index"
                                                         class="all-system-list d-flex">
-                                                        <div class="px-2">{{ item }} 溫度值</div>
-                                                        <div class="px-2 text-right tempFont">{{ tempList['5B03'][item].temp
+                                                        <div class="px-1">{{ item }} 溫度值</div>
+                                                        <div class="px-1 text-right tempFont">{{ tempList['5B03'][item].temp
                                                         }}
                                                         </div>
-                                                        <div class="px-2 text-center">°C</div>
+                                                        <div class="px-1 text-center">°C</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -175,11 +175,11 @@
                                                     v-if="tempList !== null">
                                                     <div v-for="(item, index) in tempKey" :key="index"
                                                         class="all-system-list d-flex">
-                                                        <div class="px-2">{{ item }} 溫度值</div>
-                                                        <div class="px-2 text-right tempFont">{{ tempList['5B04'][item].temp
+                                                        <div class="px-1">{{ item }} 溫度值</div>
+                                                        <div class="px-1 text-right tempFont">{{ tempList['5B04'][item].temp
                                                         }}
                                                         </div>
-                                                        <div class="px-2 text-center">°C</div>
+                                                        <div class="px-1 text-center">°C</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -413,7 +413,7 @@ export default {
                     }
                     this.sendInt = setInterval(() => {
                         getData1()
-                    }, 3000)
+                    }, 5000)
                     this.sendInt()
                     getData1()
                 } else if (this.$myPlugin.webSocketconnect03().readyState !== 1) {
