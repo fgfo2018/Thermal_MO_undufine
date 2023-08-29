@@ -1,0 +1,865 @@
+<template>
+  <v-row>
+    <v-col cols="12" lg="12" md="12">
+      <v-card ref="form" class="my-6 mx-6 card" flat outlined height="48.5em">
+        <v-card-title>
+          <v-row>
+            <v-col cols="12" class="pb-0">
+              <h6 style="color: #4f5e62">
+                異常分析 > 區域異常分析 > 異常元件統計 > 異常元件影像分析 >
+                單元件影像分析
+              </h6>
+            </v-col>
+            <v-col cols="12" md="12" class="py-0">
+              <div class="d-flex">
+                <div class="d-flex">
+                  <v-text-field
+                    class="classification input mr-2"
+                    dense
+                    disabled
+                    outlined
+                    ref=""
+                    :items="repeat_transmission"
+                    value="C-A棟"
+                    hide-details
+                  ></v-text-field>
+                  <v-text-field
+                    class="classification input mr-2"
+                    dense
+                    disabled
+                    outlined
+                    ref=""
+                    :items="repeat_transmission"
+                    value="C-A-1區"
+                    hide-details
+                  ></v-text-field>
+
+                  <v-select
+                    class="classification input mr-2"
+                    dense
+                    outlined
+                    ref=""
+                    :items="repeat_transmission"
+                    placeholder="CAM-S1-52"
+                    hide-details
+                    :menu-props="{ bottom: true, offsetY: true }"
+                  ></v-select>
+
+                  <date-picker
+                    v-model="value1"
+                    type="datetime"
+                    range
+                    placeholder="Select datetime range"
+                    style="width: 350px"
+                  ></date-picker>
+                </div>
+                <v-spacer />
+              </div>
+            </v-col>
+          </v-row>
+        </v-card-title>
+
+        <!-- this dialog is used for both create and update -->
+        <!-- 表格 -->
+        <v-row>
+          <v-col cols="5">
+            <v-row>
+              <v-col cols="12" class="pb-0">
+                <v-card outlined class="py-0 ml-4">
+                  <v-card-title class="py-0">
+                    <h6>監測項目 A棟CS-01配電盤</h6>
+                    <v-spacer />
+                    <h6>異常總筆數 100筆</h6>
+                  </v-card-title>
+                </v-card>
+              </v-col>
+              <v-col cols="12" class="py-1">
+                <v-card outlined class="ml-4">
+                  <v-card-text>
+                    <v-row>
+                      <v-col cols="3" class="py-0">
+                        <h4>元件</h4>
+                        <v-img src="../In-deep-img/03.jpg" width="200px" />
+                        <h6>總數 5個</h6>
+                        <h6>異常總比數 10筆</h6>
+                      </v-col>
+                      <v-col cols="9" class="py-0">
+                        <v-data-table
+                          :headers="elementHeaders"
+                          :items="elementItems"
+                          :items-per-page="5"
+                          hide-default-footer
+                          dense
+                        >
+                          <template v-slot:[`item.actions`]="{ item }">
+                            <v-menu v-model="dialog">
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-icon
+                                small
+                                  v-bind="attrs"
+                                  v-on="on"
+                                  @click="showEditDialog(item)"
+                                  color="#4f5e62"
+                                >
+                                  mdi-information-outline
+                                </v-icon>
+                              </template>
+                              <v-card>
+                                <v-card-text> </v-card-text>
+                              </v-card>
+                            </v-menu>
+                          </template>
+                        </v-data-table>
+                      </v-col>
+                      <v-col cols="12" class="py-0">
+                        <v-divider></v-divider>
+                      </v-col>
+
+                      <v-col cols="3" class="py-0">
+                        <h4>接點</h4>
+                        <v-img src="../In-deep-img/02.jpg" width="200px" />
+                        <h6>總數 5個</h6>
+                        <h6>異常總比數 10筆</h6>
+                      </v-col>
+                      <v-col cols="9" class="py-0">
+                        <v-data-table
+                        class="py-0"
+                          :headers="contactHeaders"
+                          :items="contactItems"
+                          :items-per-page="5"
+                          hide-default-footer
+                          dense
+                          disable-sort
+                          disable-filtering
+                        >
+
+                        
+                          <template v-slot:[`item.actions`]="{ item }">
+                            <v-menu v-model="dialog">
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-icon
+                                small
+                                  v-bind="attrs"
+                                  v-on="on"
+                                  @click="showEditDialog(item)"
+                                  color="#4f5e62"
+                                >
+                                  mdi-information-outline
+                                </v-icon>
+                              </template>
+                              <v-card>
+                                <v-card-text> </v-card-text>
+                              </v-card>
+                            </v-menu>
+                          </template>
+                        </v-data-table>
+                      </v-col>
+                      <v-col cols="12" class="py-0">
+                        <v-divider></v-divider>
+                      </v-col>
+                      <v-col cols="3" class="py-0">
+                        <h4>線材</h4>
+                        <v-img src="../In-deep-img/01.jpg" width="200px" />
+                        <h6>總數 5個</h6>
+                        <h6>異常總比數 10筆</h6>
+                      </v-col>
+                      <v-col cols="9" class="py-0">
+                        <v-data-table
+                          :headers="cableHeaders"
+                          :items="cableItems"
+                          :items-per-page="5"
+                          hide-default-footer
+                          dense
+                        >
+                          <template v-slot:[`item.actions`]="{ item }">
+                            <v-menu v-model="dialog">
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-icon
+                                small
+                                  v-bind="attrs"
+                                  v-on="on"
+                                  @click="showEditDialog(item)"
+                                  color="#4f5e62"
+                                >
+                                  mdi-information-outline
+                                </v-icon>
+                              </template>
+                              <v-card>
+                                <v-card-text> </v-card-text>
+                              </v-card>
+                            </v-menu>
+                          </template>
+                        </v-data-table>
+                      </v-col>
+                      <v-divider></v-divider>
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-col>
+
+          <v-col cols="6">
+            <ErrorHeatCompoChart />
+          </v-col>
+        </v-row>
+      </v-card>
+      <!-- 消息通知(通知儲存成功or失敗) -->
+    </v-col>
+  </v-row>
+</template>
+<script>
+// import axios from 'axios'
+import ErrorHeatCompoChart from './CHARTs/ErrorHeatCompoChart'
+
+export default {
+  components: {
+    ErrorHeatCompoChart,
+  },
+
+  data() {
+    return {
+      // 元件資料
+      elementHeaders: [
+        {
+          text: '項次',
+          sortable: false,
+           align: 'center', 
+          value: 'index',
+        },
+        { text: '影像ID', align: 'center',  sortable: false, value: 'img_id' },
+        { text: '自體異常', align: 'center',  sortable: false, value: 'error_self' },
+        { text: '比照異常', align: 'center',  sortable: false, value: 'error_compare' },
+        { text: '加總', align: 'center',  sortable: false, value: 'total' },
+        {
+          text: '詳細資訊',
+          value: 'actions',
+           align: 'center', 
+          sortable: false,
+        },
+      ],
+      elementItems: [
+        {
+          index: '01',
+          img_id: '20220829001',
+          error_self: 1,
+          error_compare: 1,
+          total: 2,
+        },
+        {
+          index: '02',
+          img_id: '20220829002',
+          error_self: 0,
+          error_compare: 2,
+          total: 2,
+        },
+        {
+          index: '03',
+          img_id: '20220829003',
+          error_self: 2,
+          error_compare: 2,
+          total: 4,
+        },
+        {
+          index: '04',
+          img_id: '20220829004',
+          error_self: 0,
+          error_compare: 0,
+          total: 0,
+        },
+        {
+          index: '05',
+          img_id: '20220829005',
+          error_self: 1,
+          error_compare: 1,
+          total: 2,
+        },
+      ],
+
+      // 接點資料
+      contactHeaders: [
+        {
+          text: '項次',
+          sortable: false,
+           align: 'center', 
+          value: 'index',
+        },
+        { text: '影像ID', align: 'center',  sortable: false, value: 'img_id' },
+        { text: '自體異常', align: 'center',  sortable: false, value: 'error_self' },
+        { text: '比照異常', align: 'center',  sortable: false, value: 'error_compare' },
+        { text: '加總', align: 'center',  sortable: false, value: 'total' },
+        {
+          text: '詳細資訊',
+          value: 'actions',
+           align: 'center', 
+          sortable: false,
+        },
+      ],
+      contactItems: [
+        {
+          index: '01',
+          img_id: '20220829001',
+          error_self: 1,
+          error_compare: 1,
+          total: 2,
+        },
+        {
+          index: '02',
+          img_id: '20220829002',
+          error_self: 0,
+          error_compare: 2,
+          total: 2,
+        },
+        {
+          index: '03',
+          img_id: '20220829003',
+          error_self: 2,
+          error_compare: 2,
+          total: 4,
+        },
+        {
+          index: '04',
+          img_id: '20220829004',
+          error_self: 0,
+          error_compare: 0,
+          total: 0,
+        },
+        {
+          index: '05',
+          img_id: '20220829005',
+          error_self: 1,
+          error_compare: 1,
+          total: 2,
+        },
+      ],
+
+      // 線材資料
+      cableHeaders: [
+        {
+          text: '項次',
+          align: 'center',
+          sortable: false,
+          value: 'index',
+        },
+        { text: '影像ID', align: 'center',  sortable: false, value: 'img_id' },
+        { text: '自體異常', align: 'center',  sortable: false, value: 'error_self' },
+        { text: '比照異常', align: 'center',  sortable: false, value: 'error_compare' },
+        { text: '加總', align: 'center',  sortable: false, value: 'total' },
+        {
+          text: '詳細資訊',
+          value: 'actions',
+           align: 'center', 
+          sortable: false,
+        },
+      ],
+      cableItems: [
+        {
+          index: '01',
+          img_id: '20220829001',
+          error_self: 1,
+          error_compare: 1,
+          total: 2,
+        },
+        {
+          index: '02',
+          img_id: '20220829002',
+          error_self: 0,
+          error_compare: 2,
+          total: 2,
+        },
+        {
+          index: '03',
+          img_id: '20220829003',
+          error_self: 2,
+          error_compare: 2,
+          total: 4,
+        },
+        {
+          index: '04',
+          img_id: '20220829004',
+          error_self: 0,
+          error_compare: 0,
+          total: 0,
+        },
+        {
+          index: '05',
+          img_id: '20220829005',
+          error_self: 1,
+          error_compare: 1,
+          total: 2,
+        },
+      ],
+
+      // date-picker
+      value1: [new Date(), new Date()],
+      valid: true,
+
+      expanded: [],
+      singleExpand: false,
+      selected: [],
+      n: 0,
+
+      message: false,
+
+      // 搜尋
+      search: '',
+      // 分頁
+      page: 1,
+      pageCount: 0,
+      itemsPerPage: 12,
+      // pageTotle: 10,
+
+      // 密碼
+
+      // 信箱
+      show: false,
+      loading: true,
+      // email: '',
+      // emailRules: [
+      //   (v) => !!v || '有效的信箱',
+      //   (v) => /.+@.+/.test(v) || '無效的信箱格式',
+      // ],
+      items: [],
+      itemsForCamTable: [],
+
+      status: ['enable', 'disable'],
+      itemsSelect: ['user', 'viewer', 'admin'],
+      dialog: false,
+      dialogForAddServer: false,
+      // dialogForServerDetailInfo: false,
+      editedItem: {},
+      radio: '',
+      snack: false,
+      snackColor: '',
+      snackText: '',
+      snackIcon: '',
+      dialogForConfirm: false,
+      dialogForConfirmServerDetailInfo: false,
+
+      radioGroup: 1,
+      dialogForTurnBack: false,
+      menu: false,
+      panel: [0, 1],
+
+      // 分頁
+    }
+  },
+
+  mounted() {},
+
+  methods: {
+    // 分業
+    setPage(data) {
+      this.page = data
+    },
+    // 允許使用之變色
+    getGreenColor() {
+      return '#8AB284'
+    },
+    getRedColor() {
+      return '#e89595'
+    },
+    // 對話框
+    showEditDialog(item) {
+      this.editedItem = item || {}
+      this.dialog = !this.dialog
+    },
+  },
+}
+</script>
+<style scoped>
+.bgimg {
+  position: absolute;
+}
+
+.scroll4::-webkit-scrollbar {
+  width: 10px;
+}
+
+.scroll4::-webkit-scrollbar-thumb {
+  background: #666;
+  border-radius: 20px;
+}
+
+.scroll4::-webkit-scrollbar-track {
+  background: #ddd;
+  border-radius: 20px;
+}
+</style>
+<style lang="scss">
+.my-header-style {
+  color: #4f5e62 !important;
+  font-size: 9px;
+}
+
+.my-header-style2 {
+  color: #4f5e62 !important;
+  font-size: 16px;
+}
+
+.my-footer-style {
+  color: #4f5e62 !important;
+}
+
+.v-data-footer .v-icon {
+  color: #4f5e62;
+  // color: #69c585;
+}
+
+// .v-data-footer > .v-input__slot {
+//   min-height: 2.21em !important;
+//   // width: 8em !important;
+//   color: #828c8f;
+//   display: flex !important;
+//   align-items: center !important;
+// }
+
+// #table > .v-data-footer .v-icon {
+//   color: black;
+// }
+
+.input_edit_left .v-input__slot .v-icon {
+  // max-height: 1em !important;
+  // width: 20em !important;
+  // color: red;
+  // display: flex !important;
+  // align-items: left !important;
+  font-size: 15px;
+  // padding: 0px 0px 0px 0px;
+}
+
+.classification .v-input__slot {
+  min-height: 36px !important;
+  width: 10em !important;
+  font-size: 13px;
+
+  max-height: 36px !important;
+  // color: red;
+  display: flex !important;
+  align-items: left !important;
+  // padding: 0px 0px 0px 0px;
+}
+
+.classification .v-input__slot .v-icon {
+  font-size: 20px;
+}
+
+.classification .v-input__slot .v-label {
+  font-size: 13px;
+}
+
+.tiny_input .v-input__slot {
+  min-height: 22px !important;
+  width: 10em !important;
+  font-size: 13px;
+
+  max-height: 22px !important;
+  // color: red;
+  display: flex !important;
+  align-items: left !important;
+  // padding: 0px 0px 0px 0px;
+}
+
+.tiny_input .v-input__slot .v-icon {
+  font-size: 20px;
+}
+
+.tiny_input .v-input__slot .v-label {
+  font-size: 13px;
+}
+
+.tiny_input input {
+  // color: #4f5e62 ;
+}
+
+.tiny_input_select .v-input__slot {
+  min-height: 22px !important;
+  width: 10em !important;
+  font-size: 13px;
+  max-height: 22px !important;
+  // color: red;
+  // display: flex !important;
+  // align-items: left !important;
+  // padding: 0px 0px 0px 0px;
+}
+
+.tiny_input_select .v-input__slot .v-icon {
+  font-size: 20px;
+  margin-bottom: 17px;
+  margin-left: 20px;
+}
+
+.tiny_input_select .v-input__slot .v-label {
+  font-size: 13px;
+}
+
+.tiny_input_select input {
+  color: #4f5e62 !important;
+}
+
+.theme--light.tiny_input_select.v-text-field--outlined:not(.v-input--is-focused):not(.v-input--has-state)
+  > .v-input__control
+  > .v-input__slot
+  fieldset {
+  color: rgba(0, 0, 0, 0.1);
+}
+// 小select
+.most_tiny_input_select .v-input__slot {
+  min-height: 22px !important;
+  width: 6em !important;
+  font-size: 13px;
+  max-height: 22px !important;
+  // color: red;
+  // display: flex !important;
+  // align-items: left !important;
+  // padding: 0px 0px 0px 0px;
+}
+
+.most_tiny_input_select .v-input__slot .v-icon {
+  font-size: 20px;
+  margin-bottom: 13px;
+  margin-left: 20px;
+}
+
+.most_tiny_input_select .v-input__slot .v-label {
+  font-size: 13px;
+}
+
+.most_tiny_input_select input {
+  color: #4f5e62 !important;
+}
+
+.theme--light.most_tiny_input_select.v-text-field--outlined:not(.v-input--is-focused):not(.v-input--has-state)
+  > .v-input__control
+  > .v-input__slot
+  fieldset {
+  color: rgba(0, 0, 0, 0.1);
+}
+
+// 移動位置按鈕設定
+.most_tiny_input_select2 .v-input__slot {
+  min-height: 22px !important;
+  width: 6em !important;
+  font-size: 13px;
+  max-height: 22px !important;
+  // color: red;
+  // display: flex !important;
+  // align-items: left !important;
+  // padding: 0px 0px 0px 0px;
+}
+
+.most_tiny_input_select2 .v-input__slot .v-icon {
+  font-size: 20px;
+  margin-bottom: 17px;
+  margin-left: 20px;
+}
+
+.most_tiny_input_select .v-input__slot .v-label {
+  font-size: 13px;
+}
+
+.most_tiny_input_select2 input {
+  color: #4f5e62 !important;
+}
+
+.theme--light.most_tiny_input_select2.v-text-field--outlined:not(.v-input--is-focused):not(.v-input--has-state)
+  > .v-input__control
+  > .v-input__slot
+  fieldset {
+  color: rgba(0, 0, 0, 0.1);
+}
+// -----
+
+.theme--light.tiny_input.v-text-field--outlined:not(.v-input--is-focused):not(.v-input--has-state)
+  > .v-input__control
+  > .v-input__slot
+  fieldset {
+  color: rgba(0, 0, 0, 0.1);
+}
+
+.theme--light.classification.v-text-field--outlined:not(.v-input--is-focused):not(.v-input--has-state)
+  > .v-input__control
+  > .v-input__slot
+  fieldset {
+  color: rgba(0, 0, 0, 0.1);
+}
+// 顯示筆數
+.item_per_page .v-input__slot {
+  min-height: 36px !important;
+  width: 5.3em !important;
+  // width: 80px !important;
+  font-size: 13px;
+}
+
+.item_per_page input {
+  color: #4f5e62 !important;
+}
+.item_per_page .v-input__slot .v-icon {
+  font-size: 20px;
+}
+
+.item_per_page .v-input__slot .v-label {
+  font-size: 14px;
+  // padding: 0px 0px 0px 0px;
+}
+
+.item_per_page.v-text-field--outlined:not(.v-input--is-focused):not(.v-input--has-state)
+  > .v-input__control
+  > .v-input__slot
+  fieldset {
+  color: rgba(0, 0, 0, 0.1);
+}
+
+// table
+// .v-data-table > .v-data-table__wrapper > table > tbody > tr > td, .v-data-table > .v-data-table__wrapper > table > tbody > tr > th, .v-data-table > .v-data-table__wrapper > table > thead > tr > td, .v-data-table > .v-data-table__wrapper > table > thead > tr > th, .v-data-table > .v-data-table__wrapper > table > tfoot > tr > td, .v-data-table > .v-data-table__wrapper > table > tfoot > tr > th {
+//      padding: 0 16px;
+//     transition: height 0.2s cubic-bezier(0.4, 0, 0.6, 1);
+// }
+
+.item.data-table-select {
+  padding: 0 16px;
+}
+
+.font {
+  font-size: 9px;
+  color: #4f5e62;
+}
+
+.font_bg_color {
+  background-color: #f0f2f3;
+  font-size: 9px;
+  color: #4f5e62;
+}
+
+.font_bg_color2 {
+  box-shadow: inset 0px 15px 10px -15px rgba(0, 0, 0, 0.49);
+  background-color: #f0f2f3;
+  color: #4f5e62;
+
+  font-size: 9px;
+}
+
+.expan_header.v-expansion-panel-header {
+  align-items: center;
+  border-radius: 0px;
+  display: flex;
+  font-size: 0.9375rem;
+  line-height: 1.2;
+  min-height: 0px;
+  outline: none;
+  padding: 16px 24px;
+  position: relative;
+  transition: 0.3s min-height cubic-bezier(0.25, 0.8, 0.5, 1);
+  width: 100%;
+  background-color: #f0f2f3;
+}
+
+.v-expansion-panel--active > .expan_header.v-expansion-panel-header {
+  min-height: 0px !important;
+}
+
+.small-radio i {
+  font-size: 12px;
+  padding: 0px;
+  margin-top: -5px;
+}
+.small-radio label {
+  font-size: 9px;
+  padding-left: 0px;
+  margin-left: -4px;
+  margin-top: -5px;
+}
+.small-radio .v-radio {
+  padding-right: 50px;
+}
+
+.small-radio.v-input--selection-controls.v-input--dense
+  .v-input--selection-controls__ripple {
+  width: 0px;
+  height: 0px;
+  padding: 0px;
+  margin: 0px;
+}
+
+.small-radio.v-input--radio-group--column
+  .v-radio:not(:last-child):not(:only-child) {
+  margin-bottom: 0px;
+  padding: 0px;
+}
+.small-radio .v-messages {
+  /* flex: 1 1 auto; */
+  font-size: 12px;
+  min-height: 0px;
+  min-width: 1px;
+  position: relative;
+}
+
+.usage_cir .v-progress-circular__underlay {
+  stroke: #fff;
+}
+
+.serv_icon.mdi:before,
+.mdi-set {
+  display: inline-block;
+  font: normal normal normal 24px/1 'Material Design Icons';
+  font-size: inherit;
+  text-rendering: auto;
+  line-height: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+</style>
+
+<style>
+.edit_pagination.custom-pagination {
+  /* display: grid;
+  padding: 0 0 0 4px;
+  grid-template-columns: 60px 60px 40px 40px 40px 40px 40px 60px 69px; */
+  display: flex;
+  justify-content: end !important;
+  margin-right: 8.5px;
+  margin-bottom: 5px;
+}
+.edit_pagination.custom-pagination span {
+  user-select: none;
+  pointer-events: none;
+}
+.edit_pagination.custom-pagination > button {
+  color: #4f5e62;
+  outline: 1px rgba(0, 0, 0, 0.12) solid;
+  font-size: 12px;
+  margin: 0px 5px;
+  margin-top: 5.8px;
+  text-align: center;
+  padding: 0px 16px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  line-height: 2px;
+  /* width: 35px; */
+  height: 34.4px;
+}
+.edit_pagination.custom-pagination > button:hover {
+  background-color: #dadada;
+}
+.edit_pagination.custom-pagination > button:active {
+  background-color: #aaaaaa;
+}
+.edit_pagination.custom-pagination > button.custom-pagination-btn-disable {
+  cursor: no-drop;
+  background-color: unset !important;
+  pointer-events: none;
+  opacity: 0.5;
+}
+.edit_pagination.ustom-pagination-btn-foucs {
+  background-color: #f0f2f3;
+  color: #4f5e62;
+  outline: 1px #4f5e62 solid !important;
+  pointer-events: none;
+}
+.edit_pagination.custom-pagination > .custom-pagination-btn-number {
+  padding: 8px 0px !important;
+  width: 34.4px;
+  height: 34.4px;
+}
+</style>
